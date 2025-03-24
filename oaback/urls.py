@@ -26,6 +26,7 @@ urlpatterns = [
     path("api/staff/", include("apps.staff.urls")),
     path("api/image/", include("apps.image.urls")),
     path("api/home/", include("apps.home.urls")),
+    path("api/file/", include("apps.upload_file.urls")),
 ] + static("api" + settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # http://127.0.0.1:8000/media/86ZnVLYKKWujT2t52WgXJS.jpg
