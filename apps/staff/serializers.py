@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
+from apps.oaauth.models import OADepartment
 
 OAUser = get_user_model()
 
@@ -27,6 +28,12 @@ class AddStaffSerializer(serializers.Serializer):
         if request.user.department.leader.uid != request.user.uid:
             raise serializers.ValidationError("非部门leader不能添加员工")
         return attrs
+
+
+class AddDepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OADepartment
+        fields = ["id", "name", "intro"]
 
 
 class ActiveStaffSerializer(serializers.Serializer):

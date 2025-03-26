@@ -14,6 +14,7 @@ class Command(BaseCommand):
             "探亲假",
             "公假",
             "年休假",
+            "其他"
         ]
         absents = []
         for absent_type in absent_types:

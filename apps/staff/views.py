@@ -7,10 +7,12 @@ from .serializers import (
     AddStaffSerializer,
     ActiveStaffSerializer,
     StaffUploadSerializer,
+    AddDepartmentSerializer,
 )
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
+
 # from django.core.mail import send_mail
 from django.conf import settings
 from utils import aeser
@@ -298,6 +300,27 @@ class StaffUploadView(APIView):
         else:
             detail = list(serializer.errors.values())[0][0]
             return Response({"detail": detail}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DepartmentAddView(generics.CreateAPIView):
+    queryset = OADepartment.objects.all()
+    serializer_class = AddDepartmentSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            department_name = serializer.validated_data["name"]
+            if OADepartment.objects.filter(name__iexact=department_name).exists():
+                return Response(
+                    {"detail": "部门已存在"}, status=status.HTTP_400_BAD_REQUEST
+                )
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(
+                serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # 此为测试celery异步任务的视图
 # class TestCeleryView(APIView):
