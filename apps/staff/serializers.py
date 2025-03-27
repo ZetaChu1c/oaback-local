@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
-from apps.oaauth.models import OADepartment
+from apps.oaauth.models import OADepartment, OAUser
 
 OAUser = get_user_model()
 
@@ -59,3 +59,19 @@ class StaffUploadSerializer(serializers.Serializer):
         validators=[FileExtensionValidator(["xlsx", "xls"])],
         error_messages={"required": "请上传文件"},
     )
+
+
+class OAUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OAUser
+        fields = ["uid", "realname"]
+
+
+class ModifyDepartmentSerializer(serializers.ModelSerializer):
+
+    leader = OAUserSerializer("realname", read_only=True)
+    manager = OAUserSerializer("realname", read_only=True)
+
+    class Meta:
+        model = OADepartment
+        fields = "__all__"

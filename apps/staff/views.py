@@ -8,12 +8,11 @@ from .serializers import (
     ActiveStaffSerializer,
     StaffUploadSerializer,
     AddDepartmentSerializer,
+    ModifyDepartmentSerializer,
 )
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
-
-# from django.core.mail import send_mail
 from django.conf import settings
 from utils import aeser
 from django.urls import reverse
@@ -322,9 +321,6 @@ class DepartmentAddView(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 此为测试celery异步任务的视图
-# class TestCeleryView(APIView):
-#     def get(self, request):
-#         # 用celery异步执行debug_task这个任务
-#         debug_task.delay()
-#         return Response({"detail": "成功"})
+class ModifyDepartmentViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = OADepartment.objects.all()
+    serializer_class = ModifyDepartmentSerializer

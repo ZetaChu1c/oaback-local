@@ -6,6 +6,7 @@ app_name = "staff"
 
 router = DefaultRouter(trailing_slash=False)
 router.register("staff", views.StaffViewSet, basename="staff")
+router.register("modify", views.ModifyDepartmentViewSet, basename="department_modify")
 
 urlpatterns = [
     path("departments", views.DepartmentListView.as_view(), name="departments"),
